@@ -1,0 +1,25 @@
+{
+    "name": "Obby",
+    "tree": {
+        "$className": "DataModel",
+
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "$path": "src/shared"
+        },
+
+        "ServerScriptService": {
+            "$path": "src/server"
+        },
+
+        "StarterPlayer": {
+            "StarterCharacterScripts": {
+                "$path": "src/temp/CHAR"
+            },
+            
+            "StarterPlayerScripts": {
+                "$path": "src/client"
+            }
+        }
+    }
+}
