@@ -1,10 +1,11 @@
-local ComponentInterface = require(script.Parent.ComponentInterface)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local IComponent = require(ReplicatedStorage.shared.IComponent)
 
 local DamageObstacle = {}
 DamageObstacle.__index = DamageObstacle
 
-setmetatable(DamageObstacle, ComponentInterface)
-local Component = ComponentInterface.new({ name = "DamageObstacle", tag = "Damage" })
+setmetatable(DamageObstacle, IComponent)
+local Component = IComponent.new({ name = "DamageObstacle", tag = "Damage" })
 setmetatable(Component, DamageObstacle)
 
 type DamageObstacle = typeof(DamageObstacle) & {}

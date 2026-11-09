@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local IService = require(ReplicatedStorage.shared.IService)
 local Checkpoint = require(ServerScriptService.components.Checkpoint)
+local DamageObstacle = require(ServerScriptService.components.DamageObstacle)
 
 local WorldComponent = {}
 WorldComponent.__index = WorldComponent
@@ -17,6 +18,7 @@ function WorldComponent.Start(self: WorldComponent)
     self:InitializeService()
 
     Checkpoint:Init()
+    DamageObstacle:Start()
 
     self:Bind(function(event, ...)
         if event == "Reload" then
