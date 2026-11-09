@@ -10,7 +10,7 @@ local Constants = require(script.Parent.Constants)
 local PlayerActionPool = Wrapper.new("PlayerActionPool")
 local CheckpointPool = Pool.new("CheckpointPool")
 local MainPlayerAudioReproducer = SoundExpert.new("Auff man", SoundManifest)
-local AmbientationAudioReproducer = SoundReproduce.new(StarterPlayer.StarterPlayerScripts.modules.SoundExpert:WaitForChild("Auff man"))
+-- local AmbientationAudioReproducer = SoundReproduce.new(StarterPlayer.StarterPlayerScripts.modules.SoundExpert:WaitForChild("Auff man"))
 local SoundEffectAudioReproducer = SoundReproduce.new(StarterPlayer.StarterPlayerScripts.modules.SoundExpert:WaitForChild("Auff man"))
 
 local Player = Constants.PLAYER

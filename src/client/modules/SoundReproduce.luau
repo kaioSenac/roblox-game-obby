@@ -86,6 +86,7 @@ function SoundReproducer.Play(self: SoundReproducer, name: string, waits: boolea
     soundInstance = self.pool[name]
     if not soundInstance then return end
 
+    soundInstance.Volume = 0.2
     soundInstance:Play()
 
     self.playing = soundInstance

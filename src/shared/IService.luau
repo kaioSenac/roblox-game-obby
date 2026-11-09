@@ -1,55 +1,55 @@
-local ServiceInterface = {}
-ServiceInterface.__index = ServiceInterface
+local IService = {}
+IService.__index = IService
 
-function ServiceInterface.new(name)
+function IService.new(name)
     assert(type(name) == "string", 'Nome invalido para um servico')
     
     local self = setmetatable({
         initialized = false,
         name = name,
         internalSignal = Instance.new("BindableEvent")
-    }, ServiceInterface)
+    }, IService)
 
     return self
 end
 
-function ServiceInterface:Start()
+function IService:Start()
     -- error(`Start() nao foi implementado para {self.name}`, 2)
     warn(`Start() nao foi implementado para o servico {self.name}`)
 end
 
-function ServiceInterface:Bind(callback)
+function IService:Bind(callback)
     local bindable = self.internalSignal :: BindableEvent
     bindable.Event:Connect(callback)
 end
 
-function ServiceInterface:internalFire(...)
+function IService:internalFire(...)
     self.internalSignal:Fire(...)
 end
 
-function ServiceInterface:InitializeService()
+function IService:InitializeService()
     assert(not self.initialized, `{self.name} ja foi inicializado`)
 
     self.initialized = true
 end
 
-function ServiceInterface:IsInitialized()
+function IService:IsInitialized()
     return self.initialized and true or false
 end
 
-function ServiceInterface:GetServiceState()
+function IService:GetServiceState()
     if self:IsInitialized() then
         return "INITIALIZED"
     end
     return "NON_INITIALIZED"
 end
 
-function ServiceInterface:GetServiceNamespace()
+function IService:GetServiceNamespace()
     return self.name
 end
 
-function ServiceInterface:AssertInitialized()
+function IService:AssertInitialized()
     assert(self.initialized, `{self.name} nao foi inicializado`)
 end
 
-return ServiceInterface
+return IService

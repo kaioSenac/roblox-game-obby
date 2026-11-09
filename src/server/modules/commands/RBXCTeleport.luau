@@ -1,55 +1,55 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local modules = ServerScriptService.modules
-local Wrapper = require(ReplicatedStorage.external.Pool.Wrapper)
-local DeepCpr = require(ReplicatedStorage.shared.DeepCpr)
+local PlayerAction = require(ServerScriptService.services.PlayerAction)
+local ICommand = require(ReplicatedStorage.shared.ICommand)
+local TableCopyRange = require(ReplicatedStorage.shared.TableCopyRange)
 local PlayerProperties = require(modules.PlayerProperties)
 
-local PlayerActions = Wrapper.new("PlayerActionPool")
+local RBXCTeleport = {}
+RBXCTeleport.__index = RBXCTeleport
 
-local RBXCommandType = require(script.Parent.settings["RBXCommandType.d"])
-local RBXCommandSettings = require(script.Parent.settings.RBXCommandSettings)
+setmetatable(RBXCTeleport, ICommand)
 
-local M = {} :: RBXCommandType.RBXCommandBody
+local Command = ICommand.new({
+	name = "teleport",
+	desc = "Teleport commands",
+	restricted = true
+})
 
-M.name = "teleport"
-M.admin = true
+setmetatable(Command, RBXCTeleport)
 
-M.run = function(ctx: TextSource, msg: string)
-	local player = PlayerProperties.getPlayerByUserId(ctx.UserId)
+type RBXCTeleportType = typeof(RBXCTeleport) & {}
+
+function RBXCTeleport.Runnable(self: RBXCTeleportType, context: TextSource, message: string): ()
+	local player = PlayerProperties.getPlayerByUserId(context.UserId)
 	if not player or not player.Character then
 		return
 	end
-	
+
 	if not PlayerProperties.isAdmin(player) then
 		return
 	end
-	
-	local commandBody = msg:split(" ")
+
+	local commandBody = message:split(" ")
 	local commandName = commandBody[2]
-	local commandArgs = DeepCpr(commandBody, 3, #commandBody)
+	local commandArgs = TableCopyRange(commandBody, 3, #commandBody)
 
 	local commands = {
 		["stage"] = function(args)
-			local stageLevel = tonumber(args[1])
-			if not stageLevel then
-				return
-			end
+			local levelStage = tonumber(args[1])
+			if not levelStage then return end
 
-			PlayerActions:BFire("teleportPlayerStage", player, stageLevel)
+			PlayerAction:TeleportPlayerStage(player, levelStage)
 		end,
 
 		["player"] = function(args)
 			local targetPlayer = PlayerProperties.getPlayerByName(args[1])
-			if not targetPlayer then
-				return
-			end
+			if not targetPlayer then return end
 
-			local stageLevel = tonumber(args[3])
-
+			local levelStage = tonumber(args[3])
 			if args[2] == "stage" then
-				PlayerActions:BFire("teleportPlayerStage", player, stageLevel)
-				return
+				PlayerAction:TeleportPlayerStage(targetPlayer, levelStage)
 			end
 		end
 	}
@@ -60,4 +60,4 @@ M.run = function(ctx: TextSource, msg: string)
 	commandMatch(commandArgs)
 end
 
-return M
+return Command

@@ -2,8 +2,6 @@ local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Pool = require(ReplicatedStorage.external.Pool)
-local ComponentTags = require(ReplicatedStorage.shared.ComponentTags)
-
 
 local CheckpointAutoComponent = {}
 
@@ -21,7 +19,7 @@ function CheckpointAutoComponent.Init(self: CheckpointAutoComponent): ()
 	assert(not self.initialized, "CheckpointComponent is already!")
 
 	self.registeredPositions = {}
-	self.tag = ComponentTags.checkpointTag
+	self.tag = "Checkpoint"
 	self.pool = Pool.new("CheckpointPool")
 
 	CollectionService:GetInstanceAddedSignal(self.tag):Connect(function(instance)

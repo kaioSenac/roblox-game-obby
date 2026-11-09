@@ -1,13 +1,14 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
-local ServiceInterface = require(script.Parent.ServiceInterface)
+local IService = require(ReplicatedStorage.shared.IService)
 local Checkpoint = require(ServerScriptService.components.Checkpoint)
 
 local WorldComponent = {}
 WorldComponent.__index = WorldComponent
 
-setmetatable(WorldComponent, ServiceInterface)
+setmetatable(WorldComponent, IService)
 
-local service = ServiceInterface.new("WorldComponent")
+local service = IService.new("WorldComponent")
 setmetatable(service, WorldComponent)
 
 type WorldComponent = typeof(WorldComponent)
