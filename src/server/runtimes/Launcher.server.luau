@@ -1,8 +1,14 @@
 local ServerScriptService = game:GetService("ServerScriptService")
-local PlayerAction = require(ServerScriptService.services.PlayerAction)
-local TextChatCommands = require(ServerScriptService.services.TextChatCommands)
-local WorldComponent = require(ServerScriptService.services.WorldComponent)
+local CheckpointService = require(ServerScriptService.services.CheckpointService)
+local PlayerService = require(ServerScriptService.services.PlayerService)
+local TextChatCommandService = require(ServerScriptService.services.TextChatCommandService)
+local TouchedService = require(ServerScriptService.services.TouchedService)
+local WorldComponentService = require(ServerScriptService.services.WorldComponentService)
 
-WorldComponent:Start()
-PlayerAction:Start()
-TextChatCommands:Start()
+TextChatCommandService:Start()
+TouchedService:Start()
+CheckpointService:Start()
+PlayerService:Start()
+
+--// esse tem que ser o ultimo pois trata-se de componentes e esses componentes precisa dos servicos
+WorldComponentService:Start()

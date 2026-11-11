@@ -26,4 +26,12 @@ function ICommand.Runnable(self: ICommandType, context: TextSource, message: str
     warn(`Runnable() nao existe no comando {self.commandName}`)
 end
 
+function ICommand.GetName(self: ICommandType): string 
+    return self.commandName
+end
+
+function ICommand.GetDesc(self: ICommandType): string
+    return self.commandDesc
+end
+
 return ICommand
