@@ -7,6 +7,7 @@ type IComponent = typeof(setmetatable({} :: {
     tag: string,
     name: string,
     initialized: boolean,
+    _fired: boolean,
     instanceAdded: BindableEvent
 }, IComponent))
 
@@ -18,6 +19,13 @@ function IComponent.new(opts)
         instanceAdded = Instance.new("BindableEvent")
     }, IComponent)
 
+
+    return self
+end
+
+function IComponent.FireInitialize(self: IComponent): ()
+    assert(not self._fired, 'Parece que ja foi inicializado')
+    
     local function instanceAddedConnection(instance)
         self.instanceAdded:Fire("ADDED", instance)
     end
@@ -34,7 +42,7 @@ function IComponent.new(opts)
         instanceAddedConnection(instance)
     end
 
-    return self
+    self._fired = true
 end
 
 --// overridable function

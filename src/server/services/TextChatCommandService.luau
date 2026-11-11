@@ -1,17 +1,17 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local ServerScriptService = game:GetService("ServerScriptService")
-local TextService = game:GetService("TextService")
-local IService = require(ReplicatedStorage.shared.IService)
+local TextChatService = game:GetService("TextChatService")
+local IService = require(ServerScriptService.modules.IService)
 local Commands = ServerScriptService.modules.commands
 
-local TextChatCommands = {}
-TextChatCommands.__index = TextChatCommands
+local TextChatCommandService = {}
+TextChatCommandService.__index = TextChatCommandService
+setmetatable(TextChatCommandService, IService)
 
-setmetatable(TextChatCommands, IService)
-local service = IService.new("TextChatCommands")
-setmetatable(service, TextChatCommands)
+local service = IService.new("TextChatCommandService")
+setmetatable(service, TextChatCommandService)
 
-function TextChatCommands.Start(self)
+function TextChatCommandService.Start(self)
     self:InitializeService()
 
     local incorporedCommands = self:IncorporeCommands(Commands)
@@ -19,21 +19,23 @@ function TextChatCommands.Start(self)
     self:TransformCommandsInTextCommandInstance(incorporedCommands)
 end
 
-function TextChatCommands.TransformCommandsInTextCommandInstance(self, commandTable)
+function TextChatCommandService.TransformCommandsInTextCommandInstance(self, commandTable)
     if not commandTable then
         return
     end
 
     for key, value in commandTable do
         local instance = Instance.new("TextChatCommand")
-        instance.Name = value.name
-        instance.PrimaryAlias = "/" .. value.name
-        instance.Triggered:Connect(value.run)
-        instance.Parent = TextService
+        instance.Name = value:GetName()
+        instance.PrimaryAlias = "/" .. value:GetName()
+        instance.Triggered:Connect(function(ctx, msg)
+            value:Runnable(ctx, msg)
+        end)
+        instance.Parent = TextChatService
     end
 end
 
-function TextChatCommands.IncorporeCommands(self, folder): { any }
+function TextChatCommandService.IncorporeCommands(self, folder): { any }
     local CommandsLoadedTable = {}
     for _, module in folder:GetChildren() do
         if module:IsA("ModuleScript") then

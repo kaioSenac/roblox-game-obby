@@ -1,7 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local modules = ServerScriptService.modules
-local PlayerAction = require(ServerScriptService.services.PlayerAction)
+local PlayerService = require(ServerScriptService.services.PlayerService)
 local ICommand = require(ReplicatedStorage.shared.ICommand)
 local TableCopyRange = require(ReplicatedStorage.shared.TableCopyRange)
 local PlayerProperties = require(modules.PlayerProperties)
@@ -16,7 +16,6 @@ local Command = ICommand.new({
 	desc = "Teleport commands",
 	restricted = true
 })
-
 setmetatable(Command, RBXCTeleport)
 
 type RBXCTeleportType = typeof(RBXCTeleport) & {}
@@ -40,7 +39,7 @@ function RBXCTeleport.Runnable(self: RBXCTeleportType, context: TextSource, mess
 			local levelStage = tonumber(args[1])
 			if not levelStage then return end
 
-			PlayerAction:TeleportPlayerStage(player, levelStage)
+			PlayerService:CheckpointTeleport(player, levelStage)
 		end,
 
 		["player"] = function(args)
@@ -49,7 +48,8 @@ function RBXCTeleport.Runnable(self: RBXCTeleportType, context: TextSource, mess
 
 			local levelStage = tonumber(args[3])
 			if args[2] == "stage" then
-				PlayerAction:TeleportPlayerStage(targetPlayer, levelStage)
+				-- PlayerAction:TeleportPlayerStage(targetPlayer, levelStage)
+				PlayerService:CheckpointTeleport(player, levelStage)
 			end
 		end
 	}
